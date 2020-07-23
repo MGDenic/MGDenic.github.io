@@ -24,13 +24,14 @@
 
   <p>The values is calculated by the zxcvbn lib on YOUR computer, no communication with phishy computers. Its dirty, but
     it works.<br>
-    Please still follow the password rules:<br>
+    Please follow the password rules:<br>
+    - at least 12 characters <br>
     - small and big letters<br>
     - numbers<br>
     - special characters<br>
-    - better longer phrases than short and hard to remeber <br>
+    - better longer phrases than short and hard to remeber (see example) <br>
     - Score >=3 <br>
-    => Bad Password: eamH2ga<br>
+    => Bad Password: eamH2gafdöqpx<br>
     => Good Password: MyTrashc@nM1ster3x (My Trashcan Mister X -> easy to remember)
     <br><br>
 
@@ -52,7 +53,7 @@
         let enteredPassword = event.target.value;
         let x = zxcvbn(enteredPassword);
         let good = false;
-        let regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
+        let regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$/;
         if (enteredPassword.match(regex) && x.score >= 3) {
           good = true;
         }

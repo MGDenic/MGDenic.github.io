@@ -48,7 +48,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('#pwin').addEventListener('change', (event) => {
+      document.querySelector('#pwin').addEventListener('keyup', (event) => {
         let enteredPassword = event.target.value;
         let x = zxcvbn(enteredPassword);
         let good = false;

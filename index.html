@@ -1,53 +1,76 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Password Check</title>
-<script type="text/javascript" src="zxcvbn.js"></script>
+  <meta charset="utf-8">
+  <title>Password Check</title>
+  <script type="text/javascript" src="zxcvbn.js"></script>
+  <style>
+    .red {
+      color: red;
+    }
+
+    .green {
+      color: darkgreen;
+    }
+  </style>
 </head>
+
 <body>
-<h2>Password Check</h2>
+  <h2>Password Check</h2>
 
-<label for="pwin">Password:</label>
-<input type="password" id="pwin" onchange="checkPassword()">
+  <label for="pwin">Password:</label>
+  <input type="password" id="pwin">
 
-<p>The values is calculated by the zxcvbn lib on YOUR computer, no communication with phishy computers. Its dirty, but it works.<br>
-Please still follow the password rules:<br>
-- small and big letters<br>
-- numbers<br>
-- special characters<br>
-- better longer phrases than short and hard to remeber <br>
-- Score >=3 <br>
-=> Bad Password: eamH2ga<br>
-=> Good Password: MyTrashc@nM1ster3x (My Trashcan Mister X -> easy to remember)
-<br><br>
+  <p>The values is calculated by the zxcvbn lib on YOUR computer, no communication with phishy computers. Its dirty, but
+    it works.<br>
+    Please still follow the password rules:<br>
+    - small and big letters<br>
+    - numbers<br>
+    - special characters<br>
+    - better longer phrases than short and hard to remeber <br>
+    - Score >=3 <br>
+    => Bad Password: eamH2ga<br>
+    => Good Password: MyTrashc@nM1ster3x (My Trashcan Mister X -> easy to remember)
+    <br><br>
 
-Score overview:<br>
-0 # too guessable: risky password. (guesses < 10^3)<br>
-1 # very guessable: protection from throttled online attacks. (guesses < 10^6)<br>
-2 # somewhat guessable: protection from unthrottled online attacks. (guesses < 10^8)<br>
-3 # safely unguessable: moderate protection from offline slow-hash scenario. (guesses < 10^10)<br>
-4 # very unguessable: strong protection from offline slow-hash scenario. (guesses >= 10^10)
+    Score overview:<br>
+    0 # too guessable: risky password. (guesses < 10^3)<br>
+      1 # very guessable: protection from throttled online attacks. (guesses < 10^6)<br>
+        2 # somewhat guessable: protection from unthrottled online attacks. (guesses < 10^8)<br>
+          3 # safely unguessable: moderate protection from offline slow-hash scenario. (guesses < 10^10)<br>
+            4 # very unguessable: strong protection from offline slow-hash scenario. (guesses >= 10^10)
 
-</p>
-<hr>
-<p id="entout"></p>
-<hr>
+  </p>
+  <hr>
+  <p id="entout"><strong>Please enter a password to determine its strength.</strong></p>
+  <hr>
 
-<script>
-function checkPassword() {
-  let pw = document.getElementById("pwin").value;
-  let x = zxcvbn(pw);
-  let good = false;
-  let regex =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
-  if(pw.match(regex) && x.score >= 3) 
-  { 
-  good = true;
-  }
-  
-  document.getElementById("entout").innerHTML = "Old entropy calc (sloppy): " + Math.log2(x.guesses) + "<br>Guesses: " + x.guesses + "<br>Guesses(log10): " + x.guesses_log10 + "<br>Score: " + x.score + " of 4<br>Feedback: " + x.feedback.warning  + "<br><br><hr>Is your password good? <b>" + good.toString() + "</b>";
-  }
-</script>
-<p><a href="https://github.com/dropbox/zxcvbn">Lib Source</a>
-<p>Made at Denic eG in Germany</p>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('#pwin').addEventListener('change', (event) => {
+        let enteredPassword = event.target.value;
+        let x = zxcvbn(enteredPassword);
+        let good = false;
+        let regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
+        if (enteredPassword.match(regex) && x.score >= 3) {
+          good = true;
+        }
+
+        document.getElementById("entout").innerHTML = "<strong>Old entropy calc (sloppy)</strong>: " + Math
+          .log2(x.guesses) +
+          "<br><strong>Guesses</strong>: " + x.guesses + "<br><strong>Guesses(log10)</strong>: " + x
+          .guesses_log10 + "<br><strong>Score</strong>: " + x.score +
+          " of 4<br><strong>Feedback</strong>: " + x.feedback.warning +
+          "<br><br><hr>Is your password good? <b>" + (good ?
+            '<span class="green">Yes</span>' :
+            '<span class="red">No</span>') +
+          "</b>";
+      });
+    });
+  </script>
+  <p><a href="https://github.com/dropbox/zxcvbn">Lib Source</a>
+    <p>Made at Denic eG in Germany</p>
 </body>
+
 </html>
